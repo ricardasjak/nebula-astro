@@ -1,0 +1,16 @@
+---
+import LayoutAuth from "../layouts/LayoutAuth.astro";
+import { SecurityUtil } from "../utils/security.util";
+
+const session = SecurityUtil.getSession(Astro.request);
+
+if (!SecurityUtil.isLoggedIn(Astro.request)) {
+  return Astro.redirect('/login');
+}
+---
+
+<LayoutAuth title="Profile">
+    <h3>Profile page</h3>
+    <caption>Hello profile</caption>
+    <pre>{JSON.stringify(session, null, 2)}</pre>
+</LayoutAuth>

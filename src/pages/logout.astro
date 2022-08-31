@@ -1,0 +1,8 @@
+---
+import { supabase } from "../supabaseClient";
+
+//supabase.auth.signOut()
+Astro.response.headers.append("Set-Cookie", `${import.meta.env.AUTH_COOKIE_TOKEN}=''`);
+return Astro.redirect('/login');
+
+---
