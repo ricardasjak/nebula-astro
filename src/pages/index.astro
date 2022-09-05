@@ -1,12 +1,16 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Card from '../components/Card.astro';
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+import { SecurityUtil } from "../utils/security.util";
+import LayoutAuth from "../layouts/LayoutAuth.astro";
+
+const LayoutComponent = SecurityUtil.isLoggedIn(Astro.request) ? LayoutAuth : Layout;
 ---
 
-<Layout title="Welcome to Astro.">
+<LayoutComponent title="Welcome to Astro.">
 	<main>
 		<h1 class="title">Welcome to <span class="text-gradient">Nebula Kingdoms</span></h1>
-		<ul role="list" class="link-card-grid">
+		<!-- <ul role="list" class="link-card-grid">
 			<Card
 				href="https://docs.astro.build/"
 				title="Documentation"
@@ -27,9 +31,9 @@ import Card from '../components/Card.astro';
 				title="Chat"
 				body="Come say hi to our amazing Discord community. ❤️"
 			/>
-		</ul>
+		</ul> -->
 	</main>
-</Layout>
+</LayoutComponent>
 
 <style>
 	:root {
@@ -50,7 +54,7 @@ import Card from '../components/Card.astro';
 		font-size: 2rem;
 	}
 
-	.text-gradient {		
+	.text-gradient {
 		font-weight: 900;
 		background-image: var(--astro-gradient);
 		-webkit-background-clip: text;

@@ -1,16 +1,21 @@
 ---
 import LayoutAuth from "../layouts/LayoutAuth.astro";
+import { ROUTES } from "../utils/routes.const";
 import { SecurityUtil } from "../utils/security.util";
 
-const session = SecurityUtil.getSession(Astro.request);
+const session = SecurityUtil.getUser(Astro.request);
+
+export interface Props {
+	title: string;
+}
 
 if (!SecurityUtil.isLoggedIn(Astro.request)) {
-  return Astro.redirect('/login');
+	return Astro.redirect(ROUTES.login);
 }
 ---
 
 <LayoutAuth title="Profile">
-    <h3>Profile page</h3>
-    <caption>Hello profile</caption>
-    <pre>{JSON.stringify(session, null, 2)}</pre>
+	<h3>My profile</h3>
+	<pre>{JSON.stringify(session, null, 2)}</pre>
+	<a href={ROUTES.createKingdom}>Create kingdom</a>
 </LayoutAuth>

@@ -1,3 +1,9 @@
-<html>
-    <h1>Page not found</h1>
-</html>
+---
+import Layout from "../layouts/Layout.astro";
+import { ROUTES } from "../utils/routes.const";
+---
+
+<Layout title="Page not found">
+	<h1 class="mb-5">Page not found</h1>
+	<h3><a href={ROUTES.home}>Go to home page</a></h3>
+</Layout>

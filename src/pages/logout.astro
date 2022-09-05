@@ -1,8 +1,8 @@
 ---
-import { supabase } from "../supabaseClient";
+import { ENV } from "../utils/env.util";
+import { ROUTES } from "../utils/routes.const";
 
-//supabase.auth.signOut()
-Astro.response.headers.append("Set-Cookie", `${import.meta.env.AUTH_COOKIE_TOKEN}=''`);
-return Astro.redirect('/login');
-
+const response = Astro.redirect(ROUTES.login);
+response.headers.append("Set-Cookie", `${ENV.AUTH_COOKIE_TOKEN}=''`);
+return response;
 ---

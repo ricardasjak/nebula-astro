@@ -1,0 +1,30 @@
+---
+import { createAccountHandler } from "../handlers/createAccount.handler";
+import Layout from "../layouts/Layout.astro";
+import { ROUTES } from "../utils/routes.const";
+
+const { request } = Astro;
+if (request.method === "POST") {
+	const form = await request.formData();
+	const email = form.get("email") as string;
+	const password = form.get("password") as string;
+	const nickname = form.get("nickname") as string;
+
+	return createAccountHandler(Astro, email, password, nickname);
+}
+---
+
+<Layout title="Create account">
+	<h1 class="text-3xl">Sign up</h1>
+	<form method="post" class="my-3 flex flex-col gap-3 max-w-xs">
+		<label for="email">Email</label>
+		<input type="email" name="email" />
+		<label for="password">Password</label>
+		<input type="password" name="password" />
+		<label for="nickname">Nickname</label>
+		<input type="text" name="nickname" />
+		<button type="submit" class="mt-5">Sign up</button>
+	</form>
+	<br />
+	Already have an account? <a href={ROUTES.login} class="underline">Sign in</a>
+</Layout>
