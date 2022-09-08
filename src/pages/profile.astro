@@ -1,4 +1,5 @@
 ---
+import { requestKingdoms } from "../handlers/requestKingdoms.handler";
 import LayoutAuth from "../layouts/LayoutAuth.astro";
 import { ROUTES } from "../utils/routes.const";
 import { SecurityUtil } from "../utils/security.util";
@@ -9,13 +10,21 @@ export interface Props {
 	title: string;
 }
 
-if (!SecurityUtil.isLoggedIn(Astro.request)) {
+if (!session) {
 	return Astro.redirect(ROUTES.login);
 }
+
+const kingdoms = await requestKingdoms(session.accountId);
 ---
 
 <LayoutAuth title="Profile">
 	<h3>My profile</h3>
 	<pre>{JSON.stringify(session, null, 2)}</pre>
-	<a href={ROUTES.createKingdom}>Create kingdom</a>
+	{
+		kingdoms.length === 0 ? (
+			<a href={ROUTES.createKingdom}>Create kingdom</a>
+		) : (
+			<pre>{JSON.stringify(kingdoms, null, 2)}</pre>
+		)
+	}
 </LayoutAuth>

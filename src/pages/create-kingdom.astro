@@ -1,24 +1,34 @@
 ---
 import { createKingdomHandler } from "../handlers/createKingdom.handler";
-import Layout from "../layouts/Layout.astro";
-import { supabase } from "../supabaseClient";
+import { errorHandler } from "../handlers/error.handler";
+import LayoutAuth from "../layouts/LayoutAuth.astro";
+import { ROUTES } from "../utils/routes.const";
+import { SecurityUtil } from "../utils/security.util";
 
 const { request } = Astro;
+
+const session = SecurityUtil.getUser(request);
+if (!session) {
+	return Astro.redirect(ROUTES.login);
+}
+
 if (request.method === "POST") {
 	const form = await request.formData();
 	const name = form.get("name") as string;
 	const ruler = form.get("ruler") as string;
+	const accountId = SecurityUtil.getUser(Astro.request)?.accountId || 0;
 
 	try {
-		const resp = await createKingdomHandler(Astro, '1', name, ruler);
-		console.log(resp);
+		const dbResponse = await createKingdomHandler(Astro, accountId, name, ruler);
+		console.log("create kingdom", { dbResponse });
+		return Astro.redirect(ROUTES.profile);
 	} catch (e) {
-		console.error(e);
+		return errorHandler(Astro, "Failed to create a kd", e);
 	}
 }
 ---
 
-<Layout title="Create account">
+<LayoutAuth title="Create account">
 	<h1 class="text-3xl">Sign up</h1>
 	<form method="post" class="my-3 flex flex-col gap-3 max-w-xs">
 		<label for="name">Name</label>
@@ -28,4 +38,4 @@ if (request.method === "POST") {
 		<button type="submit" class="mt-5">Create kingdom</button>
 	</form>
 	<br />
-</Layout>
+</LayoutAuth>

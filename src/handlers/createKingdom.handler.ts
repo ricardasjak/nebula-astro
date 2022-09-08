@@ -1,11 +1,11 @@
 import type { AstroGlobal } from "astro";
+import { COLLECTIONS } from "../models/collections.const";
 import type { Kingdom, KingdomSnapshot } from "../models/kingdom.model";
 import { supabase } from "../supabaseClient";
-import { loginHandler } from "./login.handler";
 
 export const createKingdomHandler = async (
 	Astro: AstroGlobal,
-	userId: string,
+	accountId: number,
 	name: string,
 	ruler: string
 ): Promise<Response | null> => {
@@ -16,23 +16,24 @@ export const createKingdomHandler = async (
 	// }
 
 	const kingdom: Kingdom = {
-		userId,
+		accountId,
 		name,
-                
 		ruler,
 		galaxy: 1,
-		id: 1,
+		id: undefined as unknown as number,
 		nickname: "",
-		planetType: "FW",
-		raceType: "Xivornai",
+		planet: "FW",
+		race: "Xivornai",
 		sector: 1,
-		state: "Growth",
 	};
 
 	const kingdomSnapshot: KingdomSnapshot = {
-        tick: 0,
-		kdid: 1,
+		tick: 0,
+		kdid: 0,
 		body: {
+			state: "Growth",
+			x: 0,
+			y: 0,
 			buildings: {
 				barracks: 10,
 				powerPlants: 40,
@@ -85,10 +86,13 @@ export const createKingdomHandler = async (
 	};
 
 	try {
-		const resp = await supabase.from("kingdoms").insert(kingdom);
-		const resp2 = await supabase.from("kingdomSnapshots").insert(kingdomSnapshot);
+		let dbResponse = await supabase.from(COLLECTIONS.kingdoms).insert(kingdom).select().single();
+		console.log("insert kingdom", { dbResponse });
+		kingdomSnapshot.kdid = (dbResponse.data as Kingdom).id;
+		dbResponse = await supabase.from(COLLECTIONS.kingdomSnapshots).insert(kingdomSnapshot);
+		console.log("insert snapshot", { dbResponse });
 	} catch (e) {
-		console.error(e);
+		throw e;
 	}
 	return null;
 };

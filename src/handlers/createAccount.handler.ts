@@ -36,21 +36,20 @@ export const createAccountHandler = async (
 			.select()
 			.single();
 
+		console.log("insert account", { dbResponse });
 		if (dbResponse.error) {
-			console.log("sqlCommand error", dbResponse.error);
 			return null;
 		}
-		console.log("sqlCommand", dbResponse.data);
 
 		/*
 			create auth Account, attach in-game account id
 		 */
-		const { data, error } = await supabase.auth.signUp({
+		const signupResponse = await supabase.auth.signUp({
 			email,
 			password,
 			options: { data: { nickname, accountId: (dbResponse.data as unknown as Account).id } },
 		});
-		console.log("signup", { data });
+		console.log("signup", { signupResponse });
 
 		return loginHandler(Astro, email, password);
 	} catch (e) {

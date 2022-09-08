@@ -55,7 +55,7 @@ type User = {
 };
 
 export const SecurityUtil = {
-	getUser: (request: Request): Partial<User> | undefined => {
+	getUser: (request: Request): User | undefined => {
 		const cookieHeader = request.headers.get("cookie") || "";
 		const token = parseCookie(cookieHeader)[ENV.AUTH_COOKIE_TOKEN];
 

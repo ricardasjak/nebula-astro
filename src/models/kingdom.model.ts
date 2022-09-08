@@ -3,7 +3,7 @@ export type RaceType = "Xivornai" | "Gistrami";
 export type KingdomState = "Mobilization" | "Growth";
 
 export type Kingdom = {
-	userId: string;
+	accountId: number;
 	id: number;
 	created_at?: unknown;
 	nickname: string;
@@ -11,9 +11,8 @@ export type Kingdom = {
 	ruler: string;
 	sector: number;
 	galaxy: number;
-	planetType: PlanetType;
-	raceType: RaceType;
-	state: KingdomState;
+	planet: PlanetType;
+	race: RaceType;
 };
 
 export type Buildings = {
@@ -53,6 +52,9 @@ export type KingdomSnapshot = {
 	tick: number;
 	kdid: number;
 	body: {
+		state: KingdomState;
+		x: number;
+		y: number;
 		nw: number;
 		land: number;
 		money: number;
