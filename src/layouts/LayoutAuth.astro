@@ -9,6 +9,7 @@ export interface Props {
 }
 
 const { title } = Astro.props;
+console.log("Loading page: ", title);
 
 // If the user is not logged in, redirect them to the login page
 ---
@@ -31,11 +32,13 @@ const { title } = Astro.props;
 	</head>
 	<body class="container mx-auto">
 		<header>
-			<nav class="flex text-xl gap-5 p-3 border-b-2 mb-3">
+			<nav class="flex text-lg gap-5 p-3 border-b-2 mb-3">
 				<a href={ROUTES.home}>
 					<i class="fa fa-rocket" aria-hidden="true"></i>
 				</a>
-				<a href={ROUTES.profile}>Profile</a>
+				<a href={ROUTES.status}>Status</a>
+				<a href={ROUTES.tick}>Tick</a>
+				<a href={ROUTES.profile} class="ml-auto">Profile</a>
 				<a href={ROUTES.logout}>Logout</a>
 			</nav>
 		</header>

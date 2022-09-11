@@ -2,10 +2,8 @@ export type PlanetType = "FW" | "Mount";
 export type RaceType = "Xivornai" | "Gistrami";
 export type KingdomState = "Mobilization" | "Growth";
 
-export type Kingdom = {
+export interface KingdomBase {
 	accountId: number;
-	id: number;
-	created_at?: unknown;
 	nickname: string;
 	name: string;
 	ruler: string;
@@ -13,7 +11,20 @@ export type Kingdom = {
 	galaxy: number;
 	planet: PlanetType;
 	race: RaceType;
-};
+}
+
+export interface KingdomEntity extends KingdomBase {
+	id: number;
+	created_at?: unknown;
+}
+
+export interface KingdomEntityWithSnapshots extends KingdomEntity {
+	snapshots: KingdomSnapshot[];
+}
+
+export interface Kingdom extends KingdomEntity {
+	snapshots: Map<number, KingdomSnapshot>;
+}
 
 export type Buildings = {
 	residences: number;

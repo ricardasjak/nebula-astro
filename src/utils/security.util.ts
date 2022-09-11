@@ -67,6 +67,9 @@ export const SecurityUtil = {
 		}
 		return undefined;
 	},
+	getAccountId: (request: Request) => {
+		return SecurityUtil.getUser(request)?.accountId || 0;
+	},
 	isLoggedIn: (request: Request) => !!SecurityUtil.getUser(request),
 	authGuard: (Astro: AstroGlobal) => {
 		if (!SecurityUtil.isLoggedIn(Astro.request)) {

@@ -1,6 +1,6 @@
 import type { AstroGlobal } from "astro";
 import { COLLECTIONS } from "../models/collections.const";
-import type { Kingdom, KingdomSnapshot } from "../models/kingdom.model";
+import type { KingdomEntity, KingdomBase, KingdomSnapshot } from "../models/kingdom-dto.model";
 import { supabase } from "../supabaseClient";
 
 export const createKingdomHandler = async (
@@ -15,12 +15,11 @@ export const createKingdomHandler = async (
 	// 	return new Promise(r => r(errorResponse));
 	// }
 
-	const kingdom: Kingdom = {
+	const kingdom: KingdomBase = {
 		accountId,
 		name,
 		ruler,
 		galaxy: 1,
-		id: undefined as unknown as number,
 		nickname: "",
 		planet: "FW",
 		race: "Xivornai",
@@ -88,7 +87,7 @@ export const createKingdomHandler = async (
 	try {
 		let dbResponse = await supabase.from(COLLECTIONS.kingdoms).insert(kingdom).select().single();
 		console.log("insert kingdom", { dbResponse });
-		kingdomSnapshot.kdid = (dbResponse.data as Kingdom).id;
+		kingdomSnapshot.kdid = (dbResponse.data as KingdomEntity).id;
 		dbResponse = await supabase.from(COLLECTIONS.kingdomSnapshots).insert(kingdomSnapshot);
 		console.log("insert snapshot", { dbResponse });
 	} catch (e) {
