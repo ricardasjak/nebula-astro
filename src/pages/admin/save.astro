@@ -1,0 +1,10 @@
+---
+import { GameEngine } from "../../game-state/game.state";
+import LayoutAuth from "../../layouts/LayoutAuth.astro";
+import { ROUTES } from "../../utils/routes.const";
+
+await GameEngine.save();
+return Astro.redirect(ROUTES.status);
+---
+
+<LayoutAuth title="Admin: save">Admin page: save state</LayoutAuth>

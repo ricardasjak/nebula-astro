@@ -14,7 +14,7 @@ if (!session) {
 	return Astro.redirect(ROUTES.login);
 }
 
-const { tick, kingdoms } = await GameEngine.load(); //loadGameHandler();
+const { kingdoms } = await GameEngine.load();
 const kingdom = kingdoms.get(session.accountId);
 const kdTick = kingdom?.snapshots.size || 0;
 
@@ -22,27 +22,26 @@ if (Astro.request.method === "POST" && kingdom) {
 	await GameEngine.tickKingdom(session.accountId);
 	return Astro.redirect(ROUTES.status);
 }
-await GameEngine.suspend;
-
-// GameEngine.save();
-
-console.log({ tick: kdTick });
 ---
 
 <LayoutAuth title="Kingdom Status">
-	<h3>My kingdom</h3>
 	{
 		kingdom ? (
 			<div>
-				<pre>{JSON.stringify(kingdom, null, 2)}</pre>
-				<pre>{JSON.stringify(kingdom.snapshots.size, null, 2)}</pre>
+				<h1 class="text-3xl mb-3">My kingdom</h1>
 				<form method="post">
-					<button type="submit">Tick!!!</button>
+					<button type="submit">Tick {kdTick}</button>
 				</form>
+				<pre>{JSON.stringify(kingdom, null, 2)}</pre>
 				<pre>{JSON.stringify(kingdom.snapshots.get(kdTick - 1)?.body, null, 2)}</pre>
 			</div>
 		) : (
-			<a href={ROUTES.createKingdom}>Create kingdom</a>
+			<>
+				<h3 class="text-sm text-orange-400 my-2">You don't have a kingdom yet</h3>
+				<a href={ROUTES.createKingdom}>
+					<button>Create kingdom</button>
+				</a>
+			</>
 		)
 	}
 </LayoutAuth>

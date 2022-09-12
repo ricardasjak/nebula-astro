@@ -1,0 +1,28 @@
+---
+import { GameEngine } from "../../game-state/game.state";
+import LayoutAuth from "../../layouts/LayoutAuth.astro";
+
+const { kingdomsArray: kingdoms } = await GameEngine.load();
+---
+
+<LayoutAuth title="World map">
+	<h1 class="text-xl my-4">World map</h1>
+	<hr class="my-2" />
+	<table>
+		{
+			kingdoms.map((kd) => {
+				const current = kd.snapshots.get(kd.snapshots.size - 1)?.body;
+				if (!current) return null;
+				return (
+					<tr>
+						<td>
+							{kd.name} [{kd.nickname}]
+						</td>
+						<td>{current.land.toLocaleString()}</td>
+						<td>{current.nw.toLocaleString()}</td>
+					</tr>
+				);
+			})
+		}
+	</table>
+</LayoutAuth>

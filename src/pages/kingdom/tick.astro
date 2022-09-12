@@ -2,7 +2,6 @@
 import { GameEngine } from "../../game-state/game.state";
 import { ROUTES } from "../../utils/routes.const";
 import { SecurityUtil } from "../../utils/security.util";
-import { GameEngine } from "./../../game-state/game.state";
 
 await GameEngine.tickKingdom(SecurityUtil.getAccountId(Astro.request));
 

@@ -1,6 +1,7 @@
 export const ROUTES = {
 	home: "/",
 	status: "/kingdom/status",
+	world: "/world",
 	tick: "/kingdom/tick",
 	createAccount: "/create-account",
 	createKingdom: "/create-kingdom",
@@ -8,4 +9,7 @@ export const ROUTES = {
 	logout: "/account/logout",
 	account: "/account",
 	error: "/error",
+	admin: {
+		save: "/admin/save",
+	},
 };

@@ -59,23 +59,25 @@ export type Research = {
 	money: ResearchType;
 };
 
+export type Snapshot = {
+	state: KingdomState;
+	x: number;
+	y: number;
+	nw: number;
+	land: number;
+	money: number;
+	buildings: Buildings;
+	military: Military;
+	research: Research;
+	queues: {
+		buildings: Buildings[];
+		military: Military[];
+		land: number[];
+	};
+};
+
 export type KingdomSnapshot = {
 	tick: number;
 	kdid: number;
-	body: {
-		state: KingdomState;
-		x: number;
-		y: number;
-		nw: number;
-		land: number;
-		money: number;
-		buildings: Buildings;
-		military: Military;
-		research: Research;
-		queues: {
-			buildings: Buildings[];
-			military: Military[];
-			land: number[];
-		};
-	};
+	body: Snapshot;
 };

@@ -16,12 +16,12 @@ if (request.method === "POST") {
 	const form = await request.formData();
 	const name = form.get("name") as string;
 	const ruler = form.get("ruler") as string;
-	const accountId = SecurityUtil.getUser(Astro.request)?.accountId || 0;
+	const { accountId, nickname } = session;
 
 	try {
-		const dbResponse = await createKingdomHandler(Astro, accountId, name, ruler);
+		const dbResponse = await createKingdomHandler(Astro, accountId, name, ruler, nickname);
 		console.log("create kingdom", { dbResponse });
-		return Astro.redirect(ROUTES.profile);
+		return Astro.redirect(ROUTES.status);
 	} catch (e) {
 		return errorHandler(Astro, "Failed to create a kd", e);
 	}

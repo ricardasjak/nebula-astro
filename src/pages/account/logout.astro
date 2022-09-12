@@ -1,8 +1,5 @@
 ---
-import { ENV } from "../../utils/env.util";
-import { ROUTES } from "../../utils/routes.const";
+import { logoutHandler } from "../../handlers/logout.handler";
 
-const response = Astro.redirect(ROUTES.login);
-response.headers.append("Set-Cookie", `${ENV.AUTH_COOKIE_TOKEN}=''`);
-return response;
+return logoutHandler(Astro);
 ---

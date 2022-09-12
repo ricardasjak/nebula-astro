@@ -1,4 +1,5 @@
 import type { AstroGlobal } from "astro";
+import { GameEngine } from "../game-state/game.state";
 import { COLLECTIONS } from "../models/collections.const";
 import type { KingdomEntity, KingdomBase, KingdomSnapshot } from "../models/kingdom-dto.model";
 import { supabase } from "../supabaseClient";
@@ -7,7 +8,8 @@ export const createKingdomHandler = async (
 	Astro: AstroGlobal,
 	accountId: number,
 	name: string,
-	ruler: string
+	ruler: string,
+	nickname: string
 ): Promise<Response | null> => {
 	// if (!email || !password || !nickname) {
 	// 	const errorResponse =  Astro.response;
@@ -20,7 +22,7 @@ export const createKingdomHandler = async (
 		name,
 		ruler,
 		galaxy: 1,
-		nickname: "",
+		nickname,
 		planet: "FW",
 		race: "Xivornai",
 		sector: 1,
@@ -90,6 +92,7 @@ export const createKingdomHandler = async (
 		kingdomSnapshot.kdid = (dbResponse.data as KingdomEntity).id;
 		dbResponse = await supabase.from(COLLECTIONS.kingdomSnapshots).insert(kingdomSnapshot);
 		console.log("insert snapshot", { dbResponse });
+		await GameEngine.reload();
 	} catch (e) {
 		throw e;
 	}
