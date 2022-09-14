@@ -2,9 +2,14 @@
 import { GameEngine } from "../../game-state/game.state";
 import { GameUtil } from "../../game-state/game.util";
 import LayoutAuth from "../../layouts/LayoutAuth.astro";
+import { SecurityUtil } from "../../utils/security.util";
+
+const accountId = SecurityUtil.getAccountId(Astro.request);
 
 const { kingdomsArray: kingdoms } = await GameEngine.load();
-const list = [...kingdoms].sort((a, b) => b.snapshots.get(b.snapshots.size - 1)!.tick - a.snapshots.get(a.snapshots.size - 1)!.tick)
+const list = [...kingdoms].sort(
+	(a, b) => b.snapshots.get(b.snapshots.size - 1)!.body.nw - a.snapshots.get(a.snapshots.size - 1)!.body.nw
+);
 ---
 
 <LayoutAuth title="World map">
@@ -18,14 +23,13 @@ const list = [...kingdoms].sort((a, b) => b.snapshots.get(b.snapshots.size - 1)!
 			<th>Networth</th>
 		</tr>
 		{
-			
 			list.map((kd) => {
-                const tick = kd.snapshots.size - 1;
+				const tick = kd.snapshots.size - 1;
 				const current = kd.snapshots.get(tick)?.body;
 				if (!current) return null;
 				return (
-					<tr>
-                        <td>{tick + 1}</td>
+					<tr class={kd.accountId === accountId ? "text-orange-400" : ""}>
+						<td>{tick + 1}</td>
 						<td>
 							{kd.name} [{kd.nickname}]
 						</td>
@@ -35,5 +39,7 @@ const list = [...kingdoms].sort((a, b) => b.snapshots.get(b.snapshots.size - 1)!
 				);
 			})
 		}
+
+
 	</table>
 </LayoutAuth>

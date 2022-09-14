@@ -32,6 +32,7 @@ if (Astro.request.method === "POST" && kingdom) {
 // console.log(kingdom);
 // console.log({snaps: [...kingdom.snapshots.values()]});
 const { queues, buildings, military, research, ...rest } = current;
+
 // console.log({mil: queues.military});
 console.log(queues);
 ---
@@ -45,11 +46,21 @@ console.log(queues);
 					<button type="submit">Tick {kdTick}</button>
 				</form>
 
-				<h5>Money: {current.money.toLocaleString()}</h5>
-				<h5>Land: {current.land.toLocaleString()}</h5>
-				<h5>Exploration queue: {current.queues.land.join(", ")}</h5>
-				<h5>Tanks: {current.military.tanks.toLocaleString()}</h5>
-				<h5>Tanks queue: {(current.queues.military.tanks || []).join(", ")}</h5>
+				<div class="grid grid-cols-1 gap-3">
+					<h5>Money: {current.money.toLocaleString()}</h5>
+					<h5>
+						Land: {current.land.toLocaleString()}
+						<span class="ml-6">{current.queues.land.join(", ")}</span>
+					</h5>
+					<div>
+						Soldiers: {current.military.soldiers.toLocaleString()}{" "}
+						<span class="ml-6">{(current.queues.military.soldiers || []).join(", ")}</span>
+					</div>
+					<div>
+						Tanks: {current.military.tanks.toLocaleString()}{" "}
+						<span class="ml-6">{(current.queues.military.tanks || []).join(", ")}</span>
+					</div>
+				</div>
 				<div class="text-xs grid grid-cols-7 mt-6">
 					<pre class="ext-clip text-ellipsis overflow-clip">{JSON.stringify(kingdom, null, 2)}</pre>
 					<pre>{JSON.stringify(rest, null, 2)}</pre>

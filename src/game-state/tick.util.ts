@@ -1,4 +1,4 @@
-import type { Kingdom, KingdomSnapshot, Snapshot } from "../models/kingdom-dto.model";
+import type { Kingdom, KingdomSnapshot, Snapshot, UnitType } from "../models/kingdom-dto.model";
 import { GameUtil } from "./game.util";
 
 type Error = string | undefined;
@@ -16,24 +16,16 @@ export const TickUtil = {
 		next.land += next.queues.land[0] || 0;
 		next.queues.land.splice(0, 1);
 
-		if (typeof next.queues.military === "array") {
-			// next.queues.military = {
-			// 	dr: [],
-			// 	hgl: [],
-			// 	ld: [],
-			// 	lt: [],
-			// 	sci: [],
-			// 	soldiers: [],
-			// 	tanks: [],
-			// 	tf: [],
-			// 	tr: [],
-			// };
-			console.log("*************** FOUND AN ARRAY!!!! ******", next.queues.military);
-		}
-
 		// console.log("military queue next: ", next.queues.military);
-		next.military.tanks += next.queues.military.tanks[0] || 0;
-		next.queues.military.tanks.splice(0, 1);
+		// next.military.tanks += next.queues.military.tanks[0] || 0;
+		// next.queues.military.tanks.splice(0, 1);
+
+		(Object.keys(next.queues.military) as UnitType[]).forEach((unit) => {
+			if (next.queues.military[unit][0]) {
+				next.military[unit] += next.queues.military[unit][0];
+				next.queues.military[unit].splice(0, 1);
+			}
+		});
 
 		next.nw = GameUtil.getNetworth(next);
 		next.money += next.land * 120; // temp hack
