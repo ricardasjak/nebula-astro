@@ -6,6 +6,9 @@ type Error = string | undefined;
 export const TickUtil = {
 	tick: (kd: Kingdom): [Kingdom, Error] => {
 		const tick = kd.snapshots.size;
+		if (tick === 480) {
+			return [kd, undefined];
+		}
 		const current = GameUtil.getCurrent(kd);
 		const next = JSON.parse(JSON.stringify(current)) as typeof current;
 

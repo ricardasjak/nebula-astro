@@ -1,22 +1,31 @@
 ---
 import { GameEngine } from "../../game-state/game.state";
+import { GameUtil } from "../../game-state/game.util";
 import LayoutAuth from "../../layouts/LayoutAuth.astro";
 
 const { kingdomsArray: kingdoms } = await GameEngine.load();
+const list = [...kingdoms].sort((a, b) => b.snapshots.get(b.snapshots.size - 1)!.tick - a.snapshots.get(a.snapshots.size - 1)!.tick)
 ---
 
 <LayoutAuth title="World map">
 	<h1 class="text-xl my-4">World map</h1>
 	<hr class="my-2" />
 	<table>
+		<tr>
+			<th>Tick</th>
+			<th>Kingdom</th>
+			<th>Land</th>
+			<th>Networth</th>
+		</tr>
 		{
-			kingdoms.map((kd) => {
+			
+			list.map((kd) => {
                 const tick = kd.snapshots.size - 1;
 				const current = kd.snapshots.get(tick)?.body;
 				if (!current) return null;
 				return (
 					<tr>
-                        <td>{tick}</td>
+                        <td>{tick + 1}</td>
 						<td>
 							{kd.name} [{kd.nickname}]
 						</td>

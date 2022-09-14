@@ -82,9 +82,7 @@ class Game {
 		const snapshots: KingdomSnapshot[] = [];
 		this.kingdoms.forEach((kd, accountId) => {
 			kd.snapshots.forEach((snap, kdid) => {
-				if (snap.kdid === 30) {
-					snapshots.push(snap);
-				}
+				snapshots.push(snap);
 			});
 		});
 		console.log("update count: ", snapshots.length);
