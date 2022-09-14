@@ -28,7 +28,14 @@ export const MilitaryUtil = {
 		if (cost > current.money) {
 			return `Insufficient money to buy ${amount} units.`;
 		}
+		if (amount > current.military.soldiers && unit !== "tf" && unit !== "soldiers") {
+			return `Not enough soldiers available for ${amount} units.`;
+		}
+
 		current.money -= cost;
+		if (unit !== "tf" && unit !== "soldiers") {
+			current.military.soldiers -= amount;
+		}
 		console.log("***************** typeof", typeof current.queues.military);
 		current.queues.military[unit] = GameUtil.getProductionQueue(
 			current.queues.military[unit],
