@@ -32,6 +32,8 @@ if (Astro.request.method === "POST" && kingdom) {
 // console.log(kingdom);
 // console.log({snaps: [...kingdom.snapshots.values()]});
 const { queues, buildings, military, research, ...rest } = current;
+// console.log({mil: queues.military});
+console.log(queues);
 ---
 
 <LayoutAuth title="Kingdom Status">
@@ -46,13 +48,16 @@ const { queues, buildings, military, research, ...rest } = current;
 				<h5>Money: {current.money.toLocaleString()}</h5>
 				<h5>Land: {current.land.toLocaleString()}</h5>
 				<h5>Exploration queue: {current.queues.land.join(", ")}</h5>
-				<div class="text-xs grid grid-cols-6 mt-6">
+				<h5>Tanks: {current.military.tanks.toLocaleString()}</h5>
+				<h5>Tanks queue: {(current.queues.military.tanks || []).join(", ")}</h5>
+				<div class="text-xs grid grid-cols-7 mt-6">
 					<pre class="ext-clip text-ellipsis overflow-clip">{JSON.stringify(kingdom, null, 2)}</pre>
 					<pre>{JSON.stringify(rest, null, 2)}</pre>
 					<pre>{JSON.stringify(buildings, null, 2)}</pre>
 					<pre>{JSON.stringify(military, null, 2)}</pre>
 					<pre>{JSON.stringify(research, null, 2)}</pre>
 					<pre>{JSON.stringify(queues, null, 2)}</pre>
+					<pre>Tanks: {JSON.stringify(queues.military.tanks, null, 2)}</pre>
 				</div>
 			</div>
 		) : (

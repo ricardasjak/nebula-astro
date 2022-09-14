@@ -41,7 +41,7 @@ export const createKingdomHandler = async (
 				powerPlants: 40,
 				residences: 80,
 				starMines: 30,
-				trainingCamps: 0,
+				trainingCamps: 30,
 			},
 			land: 250,
 			military: {
@@ -60,7 +60,17 @@ export const createKingdomHandler = async (
 			queues: {
 				buildings: [],
 				land: [],
-				military: [],
+				military: {
+					dr: [],
+					hgl: [],
+					ld: [],
+					lt: [],
+					sci: [],
+					soldiers: [],
+					tanks: [],
+					tf: [],
+					tr: [],
+				},
 			},
 			research: {
 				pop: {

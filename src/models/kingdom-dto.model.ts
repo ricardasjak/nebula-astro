@@ -2,6 +2,8 @@ export type PlanetType = "FW" | "Mount";
 export type RaceType = "Xivornai" | "Gistrami";
 export type KingdomState = "Mobilization" | "Growth";
 
+export type Error = string | undefined;
+
 export interface KingdomBase {
 	accountId: number;
 	nickname: string;
@@ -34,17 +36,21 @@ export type Buildings = {
 	trainingCamps: number;
 };
 
-export type Military = {
-	soldiers: number;
-	lt: number;
-	tr: number;
-	dr: number;
-	ld: number;
-	tanks: number;
-	hgl: number;
-	tf: number;
-	sci: number;
-};
+export type UnitType = "soldiers" | "lt" | "tr" | "dr" | "ld" | "tanks" | "hgl" | "tf" | "sci";
+
+export type Military = Record<UnitType, number>;
+
+// export type Military = {
+// 	soldiers: number;
+// 	lt: number;
+// 	tr: number;
+// 	dr: number;
+// 	ld: number;
+// 	tanks: number;
+// 	hgl: number;
+// 	tf: number;
+// 	sci: number;
+// };
 
 export type ResearchType = {
 	points: number;
@@ -71,7 +77,7 @@ export type Snapshot = {
 	research: Research;
 	queues: {
 		buildings: Buildings[];
-		military: Military[];
+		military: Record<UnitType, number[]>;
 		land: number[];
 	};
 };

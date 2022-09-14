@@ -1,0 +1,54 @@
+---
+import { GameEngine } from "../../game-state/game.state";
+import { COLLECTIONS } from "../../models/collections.const";
+import type { KingdomSnapshot } from "../../models/kingdom-dto.model";
+import { supabase } from "../../supabaseClient";
+
+const dbResponse = await supabase.from(COLLECTIONS.kingdomSnapshots).select();
+const list = dbResponse.data as KingdomSnapshot[];
+
+list.forEach(snap => {
+    snap.body.queues.military = {
+					dr: [],
+					hgl: [],
+					ld: [],
+					lt: [],
+					sci: [],
+					soldiers: [],
+					tanks: [],
+					tf: [],
+					tr: [],
+				}
+});
+
+const updateResponse = await supabase.from(COLLECTIONS.kingdomSnapshots).update(list);
+console.log({updateResponse});
+
+// await GameEngine.save();
+// const {kingdomsArray} = await GameEngine.load(true);
+
+
+// console.log('started migration');
+// kingdomsArray.forEach(kd => {
+//     [...kd.snapshots.values()].forEach(snap => {
+//         if (typeof snap.body.queues.military === 'object') {
+//             console.log('found array', kd.accountId, snap.body.queues.military);
+//             // snap.body.queues.military = {
+// 			// 		dr: [],
+// 			// 		hgl: [],
+// 			// 		ld: [],
+// 			// 		lt: [],
+// 			// 		sci: [],
+// 			// 		soldiers: [],
+// 			// 		tanks: [],
+// 			// 		tf: [],
+// 			// 		tr: [],
+// 			// 	};
+//             // console.log(typeof snap.body.queues.military);
+//         }
+//     })
+// })
+
+// await GameEngine.save();
+console.log('migration completed');
+---

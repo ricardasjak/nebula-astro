@@ -1,8 +1,6 @@
-import type { Kingdom } from "../models/kingdom-dto.model";
+import type { Kingdom, Error } from "../models/kingdom-dto.model";
 import { GAME_VARS } from "./game.cost";
 import { GameUtil } from "./game.util";
-
-type Error = string | undefined;
 
 export const ExploreUtil = {
 	getExploreCost: (kd: Kingdom): number => {

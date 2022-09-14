@@ -46,7 +46,7 @@ export const GameUtil = {
 
 		return Math.floor(result);
 	},
-	getProductionQueue: (currentProduction: number[], amount: number, duration: number): number[] => {
+	getProductionQueue: (currentProduction: number[] = [], amount: number, duration: number): number[] => {
 		const full = Math.floor(amount / duration);
 		const reminder = amount - full * duration;
 		const production = [...currentProduction];

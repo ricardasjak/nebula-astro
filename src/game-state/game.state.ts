@@ -83,6 +83,9 @@ class Game {
 		this.kingdoms.forEach((kd, accountId) => {
 			kd.snapshots.forEach((snap, kdid) => {
 				snapshots.push(snap);
+				if (kdid === 30) {
+					console.log(snap.body.queues);
+				}
 			});
 		});
 		console.log("update count: ", snapshots.length);

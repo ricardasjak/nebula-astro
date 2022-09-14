@@ -2,7 +2,9 @@
 import { ExploreUtil } from "../../game-state/explore.util";
 import { GameEngine } from "../../game-state/game.state";
 import { GameUtil } from "../../game-state/game.util";
+import { MilitaryUtil } from "../../game-state/military.util";
 import LayoutAuth from "../../layouts/LayoutAuth.astro";
+import { Action, ActionType, ACTION_TITLE } from "../../models/action.model";
 import { ROUTES } from "../../utils/routes.const";
 import { SecurityUtil } from "../../utils/security.util";
 
@@ -14,13 +16,22 @@ if (!session) {
 	return Astro.redirect(ROUTES.login);
 }
 
+const actions: Action[] = [{
+	type: "explore",
+	amount: 36
+}, {
+	type: "tanks",
+	amount: 100
+}];
+
 const kingdom = await GameEngine.loadKingdom(session.accountId);
 if (!kingdom) return Astro.redirect(ROUTES.createKingdom);
 
 if (Astro.request.method === "POST") {
 	const formData = await Astro.request.formData();
 	const values = [...formData.values()];
-	const action = formData.get(ACTION);
+	const action = formData.get(ACTION) as ActionType;
+	// console.log({action});
 
 	switch (action) {
 		case "explore": {
@@ -29,21 +40,34 @@ if (Astro.request.method === "POST") {
 			error = ExploreUtil.explore(kingdom, 36)[1];
 			console.log("exploration:", current.money, current.queues.land);
 		}
+		case "tanks": {
+			const current = GameUtil.getCurrent(kingdom);
+			console.log("tanks:", current.money, current.queues.military.tanks || []);
+			error = MilitaryUtil.buy(kingdom, 'tanks', 100);
+			console.log("tanks:", current.money, current.queues.military.tanks);
+		}
 	}
 
-	if (!error) {
-		return Astro.redirect(ROUTES.status);
-	}
+	// if (!error) {
+	// 	return Astro.redirect(ROUTES.status);
+	// }
 }
 ---
 
 <LayoutAuth title="Action Centre">
 	<div class="grid grid-cols-1 gap-5 w-max">
 		{!!error && <pre class="text-red-500 text-sm">{error}</pre>}
-		<form method="post">
-			<input value="explore" name={ACTION} type="hidden" />
-			<button type="submit" class="w-64">Explore 36 land</button>
-		</form>
+		{actions.map(({type, amount}) => {
+			return (
+			<form method="post">
+				<input value={type} name={ACTION} type="hidden" />
+				<button type="submit" class="w-64">{ACTION_TITLE[type](amount)}</button>
+			</form>
+			)
+		})}
+
+		<!-- <pre>{JSON.stringify(GameUtil.getCurrent(kingdom).queues, null, 2)}</pre> -->
+	
 		<!-- <form method="post">
 			<input value="starmines" name={ACTION} type="hidden" />
 			<button type="submit" class="w-64">Build star mines</button>
