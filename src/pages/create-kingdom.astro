@@ -29,12 +29,13 @@ if (request.method === "POST") {
 ---
 
 <LayoutAuth title="Create account">
-	<h1 class="text-3xl">Sign up</h1>
+	<h1 class="text-3xl">Create kingdom</h1>
+	<h3 class="text-sm text-orange-400 my-2 animate-pulse">### You don't have a kingdom yet ###</h3>
 	<form method="post" class="my-3 flex flex-col gap-3 max-w-xs">
-		<label for="name">Name</label>
-		<input type="text" name="name" />
-		<label for="ruler">Ruler</label>
-		<input type="text" name="ruler" />
+		<label for="name">Kingdom Name</label>
+		<input type="text" name="name" required maxlength="20" />
+		<label for="ruler">Ruler Name</label>
+		<input type="text" name="ruler" required maxlength="20" />
 		<button type="submit" class="mt-5">Create kingdom</button>
 	</form>
 	<br />

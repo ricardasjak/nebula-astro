@@ -1,7 +1,7 @@
 import type { Kingdom, Military, Snapshot } from "../models/kingdom-dto.model";
 
 export const GameUtil = {
-	getCurrent: (kingdom: Kingdom) => {
+	getCurrent: (kingdom: Kingdom): Snapshot => {
 		let result = kingdom.snapshots.get(kingdom.snapshots.size - 1);
 		if (!result) {
 			console.warn("Kingdom snapshot not found. Fallback to an array last element");
@@ -13,8 +13,7 @@ export const GameUtil = {
 		}
 		return result!.body;
 	},
-	getNetworth: (kingdom: Kingdom): number => {
-		const current = GameUtil.getCurrent(kingdom);
+	getNetworth: (current: Snapshot): number => {
 		const NW_TABLE = {
 			land: 50,
 			money: 1 / 500,
@@ -45,6 +44,19 @@ export const GameUtil = {
 			NW_TABLE_MILITARY.tf * m.tf +
 			NW_TABLE_MILITARY.tr * m.tr;
 
-		return result;
+		return Math.floor(result);
+	},
+	getProductionQueue: (currentProduction: number[], amount: number, duration: number): number[] => {
+		const full = Math.floor(amount / duration);
+		const reminder = amount - full * duration;
+		const production = [...currentProduction];
+
+		for (let i = 0; i < duration; i++) {
+			production[i] = full + (production[i] || 0);
+		}
+		for (let i = 0; i < reminder; i++) {
+			production[i] = 1 + (production[i] || 0);
+		}
+		return production;
 	},
 };

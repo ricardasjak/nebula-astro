@@ -11,10 +11,12 @@ const { kingdomsArray: kingdoms } = await GameEngine.load();
 	<table>
 		{
 			kingdoms.map((kd) => {
-				const current = kd.snapshots.get(kd.snapshots.size - 1)?.body;
+                const tick = kd.snapshots.size - 1;
+				const current = kd.snapshots.get(tick)?.body;
 				if (!current) return null;
 				return (
 					<tr>
+                        <td>{tick}</td>
 						<td>
 							{kd.name} [{kd.nickname}]
 						</td>

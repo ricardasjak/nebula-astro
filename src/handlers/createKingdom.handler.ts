@@ -31,6 +31,7 @@ export const createKingdomHandler = async (
 	const kingdomSnapshot: KingdomSnapshot = {
 		tick: 0,
 		kdid: 0,
+		created_at: new Date().toUTCString(),
 		body: {
 			state: "Growth",
 			x: 0,

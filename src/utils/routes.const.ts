@@ -3,6 +3,7 @@ export const ROUTES = {
 	status: "/kingdom/status",
 	world: "/world",
 	tick: "/kingdom/tick",
+	action: "/kingdom/action",
 	createAccount: "/create-account",
 	createKingdom: "/create-kingdom",
 	login: "/account/login",

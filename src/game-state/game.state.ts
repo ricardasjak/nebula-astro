@@ -2,6 +2,7 @@ import { COLLECTIONS } from "../models/collections.const";
 import type { Kingdom, KingdomBase, KingdomEntityWithSnapshots, KingdomSnapshot } from "../models/kingdom-dto.model";
 import { supabase } from "../supabaseClient";
 import { GameUtil } from "./game.util";
+import { TickUtil } from "./tick.util";
 
 type AcountID = number;
 
@@ -61,6 +62,11 @@ class Game {
 		};
 	}
 
+	async loadKingdom(accountId: number): Promise<Kingdom | undefined> {
+		await this.load();
+		return this.kingdoms.get(accountId);
+	}
+
 	async reload(): Promise<GameState> {
 		await this.save();
 		return this.load(true);
@@ -71,13 +77,18 @@ class Game {
 			console.log(`${value.name}: ${value.snapshots.size}`);
 		});
 
+		// console.log("kd 24", [...this.kingdoms.get(24).snapshots.values()]);
+
 		const snapshots: KingdomSnapshot[] = [];
 		this.kingdoms.forEach((kd, accountId) => {
 			kd.snapshots.forEach((snap, kdid) => {
-				snapshots.push(snap);
+				if (snap.kdid === 30) {
+					snapshots.push(snap);
+				}
 			});
 		});
-		console.log("update: ", snapshots.length);
+		console.log("update count: ", snapshots.length);
+		console.log("update: ", snapshots);
 
 		this.suspend = new Promise((resolve, reject) => {
 			supabase
@@ -106,21 +117,27 @@ class Game {
 	// }
 
 	async tickKingdom(accountId: number) {
-		const { kingdoms } = await this.load();
-		const kd = kingdoms.get(accountId);
+		const kd = await this.loadKingdom(accountId);
 		if (!kd) {
-			throw "Kingdom not found, account id: " + accountId;
+			return;
 		}
-		const kdTick = kd.snapshots.size;
-		const current = kd.snapshots.get(kdTick - 1);
-		const next = JSON.parse(JSON.stringify(current)) as KingdomSnapshot;
+		// console.log(kd);
+		TickUtil.tick(kd);
+		// console.log(kd);
+		// const kd = kingdoms.get(accountId);
+		// if (!kd) {
+		// 	throw "Kingdom not found, account id: " + accountId;
+		// }
+		// const kdTick = kd.snapshots.size;
+		// const current = kd.snapshots.get(kdTick - 1);
+		// const next = JSON.parse(JSON.stringify(current)) as KingdomSnapshot;
 
-		next.body.land += 1;
-		next.body.military.tanks += 100;
-		next.tick = kdTick;
+		// next.body.land += 1;
+		// next.body.military.tanks += 100;
+		// next.tick = kdTick;
 
-		kd.snapshots.set(kdTick, next);
-		next.body.nw = GameUtil.getNetworth(kd);
+		// kd.snapshots.set(kdTick, next);
+		// next.body.nw = GameUtil.getNetworth(kd);
 	}
 }
 

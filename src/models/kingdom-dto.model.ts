@@ -80,4 +80,5 @@ export type KingdomSnapshot = {
 	tick: number;
 	kdid: number;
 	body: Snapshot;
+	created_at?: unknown;
 };
