@@ -41,12 +41,12 @@ console.log(queues);
 	{
 		kingdom ? (
 			<div>
-				<h1 class="text-3xl mb-3">My kingdom</h1>
-				<form method="post" class="my-3">
+				<h1 class="text-3xl mb-3">Kingom Status</h1>
+				<form method="post" class="my-6">
 					<button type="submit">Tick {kdTick}</button>
 				</form>
 
-				<div class="grid grid-cols-1 gap-3">
+				<div class="grid grid-cols-1 gap-3 text-sm">
 					<h5>Money: {current.money.toLocaleString()}</h5>
 					<h5>
 						Land: {current.land.toLocaleString()}
@@ -73,15 +73,9 @@ console.log(queues);
 						<span class="ml-6">{(current.queues.military.sci || []).join(", ")}</span>
 					</div>
 				</div>
-				<div class="text-xs grid grid-cols-7 mt-6">
-					<pre class="ext-clip text-ellipsis overflow-clip">{JSON.stringify(kingdom, null, 2)}</pre>
-					<pre>{JSON.stringify(rest, null, 2)}</pre>
-					<pre>{JSON.stringify(buildings, null, 2)}</pre>
-					<pre>{JSON.stringify(military, null, 2)}</pre>
-					<pre>{JSON.stringify(research, null, 2)}</pre>
-					<pre>{JSON.stringify(queues, null, 2)}</pre>
-					<pre>Tanks: {JSON.stringify(queues.military.tanks, null, 2)}</pre>
-				</div>
+				<a class="text-orange-500 mt-6 block" href="/kingdom/details">
+					Kingom Details (debug info)
+				</a>
 			</div>
 		) : (
 			<>

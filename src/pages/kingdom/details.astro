@@ -1,0 +1,52 @@
+---
+import { GameEngine } from "../../game-state/game.state";
+import { GameUtil } from "../../game-state/game.util";
+import LayoutAuth from "../../layouts/LayoutAuth.astro";
+import type { Snapshot } from "../../models/kingdom-dto.model";
+import { ROUTES } from "../../utils/routes.const";
+import { SecurityUtil } from "../../utils/security.util";
+
+const session = SecurityUtil.getUser(Astro.request);
+
+export interface Props {
+	title: string;
+}
+
+if (!session) {
+	return Astro.redirect(ROUTES.login);
+}
+
+const kingdom = await GameEngine.loadKingdom(session.accountId);
+
+if (!kingdom) {
+	return Astro.redirect(ROUTES.createKingdom);
+}
+const current = GameUtil.getCurrent(kingdom);
+const kdTick = kingdom?.snapshots.size || 0;
+
+// console.log(kingdom);
+// console.log({snaps: [...kingdom.snapshots.values()]});
+const { queues, buildings, military, research, ...rest } = current;
+
+console.log(queues);
+---
+
+<LayoutAuth title="Kingdom Details">
+	{
+		kingdom && (
+			<div>
+				<h1 class="text-3xl mb-3">My kingdom (debug info)</h1>
+
+				<div class="text-xs grid grid-cols-7 mt-6">
+					<pre class="ext-clip text-ellipsis overflow-clip">{JSON.stringify(kingdom, null, 2)}</pre>
+					<pre>{JSON.stringify(rest, null, 2)}</pre>
+					<pre>{JSON.stringify(buildings, null, 2)}</pre>
+					<pre>{JSON.stringify(military, null, 2)}</pre>
+					<pre>{JSON.stringify(research, null, 2)}</pre>
+					<pre>{JSON.stringify(queues, null, 2)}</pre>
+					<pre>Tanks: {JSON.stringify(queues.military.tanks, null, 2)}</pre>
+				</div>
+			</div>
+		)
+	}
+</LayoutAuth>

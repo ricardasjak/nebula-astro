@@ -11,7 +11,7 @@ const tick = GameUtil.getLastTick(kingdom);
 const current = GameUtil.getCurrent(kingdom);
 ---
 
-<div class="flex flex-row justify-between border-b-2 text-xs pt-2 pb-2">
+<div class="grid grid-cols-2 md:grid-cols-4 md:flex md:justify-between gap-2 border-b-2 text-xs pt-2 pb-2">
 	<div>Tick: {tick + 1}</div>
 	<div>Money: {current.money.toLocaleString()}</div>
 	<div>Land: {current.land.toLocaleString()}</div>

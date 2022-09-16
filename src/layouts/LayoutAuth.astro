@@ -34,18 +34,38 @@ console.log("Loading page: ", title);
 	</head>
 	<body class="container mx-auto">
 		<header class="mb-6">
-			<nav class="flex text-lg gap-5 p-3 border-b-2 mb-3">
-				<a href={ROUTES.action}>
-					<i class="fa fa-rocket" aria-hidden="true"></i>
-				</a>
-				<a href={ROUTES.action}>Action</a>
+			<nav class="flex flex-row flex-wrap gap-x-5 gap-y-3 pb-3 border-b-2 mb-3 text-xs md:text-lg">
+				<div class="flex gap-2">
+					<a href={ROUTES.action}>
+						<i class="fa fa-rocket" aria-hidden="true"></i>
+					</a>
+
+					<a href={ROUTES.action}>Action</a>
+				</div>
 				<a href={ROUTES.status}>Status</a>
 				<a href={ROUTES.world}>World</a>
 				<a href={ROUTES.tick}>Tick</a>
 				<a href={ROUTES.admin.save}>Save your changes</a>
-				<a href={ROUTES.account} class="ml-auto">Account</a>
+				<a href={ROUTES.account} class="md:ml-auto">Account</a>
 				<a href={ROUTES.logout}>Logout</a>
 			</nav>
+			<!-- Mobile menu button -->
+			<!-- <div class="md:hidden flex items-center">
+				<div class="outline-none mobile-menu-button">
+					<svg
+						class="w-6 h-6 text-gray-500"
+						x-show="!showMenu"
+						fill="none"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						viewBox="0 0 24 24"
+						stroke="currentColor"
+					>
+						<path d="M4 6h16M4 12h16M4 18h16"></path>
+					</svg>
+				</div>
+			</div> -->
 			{isLoggedIn && <Statusbar />}
 		</header>
 
