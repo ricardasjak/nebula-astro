@@ -2,6 +2,7 @@ import type { Kingdom, Military, Snapshot } from "../models/kingdom-dto.model";
 
 export const GameUtil = {
 	getLastTick: (kingdom: Kingdom): number => {
+		if (!kingdom) return 0;
 		const index = Math.max(kingdom.snapshots.size - 1, 0);
 		return index;
 	},

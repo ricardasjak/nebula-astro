@@ -3,6 +3,8 @@ import { SecurityUtil } from "../utils/security.util";
 import "../styles/global.css";
 import { ROUTES } from "../utils/routes.const";
 import Statusbar from "../components/Statusbar.astro";
+import { GameUtil } from "../game-state/game.util";
+import { GameEngine } from "../game-state/game.state";
 
 // import { isLoggedIn } from '../utils';
 export interface Props {
@@ -10,7 +12,8 @@ export interface Props {
 }
 
 const { title } = Astro.props;
-const isLoggedIn = SecurityUtil.isLoggedIn(Astro.request);
+const accountId = SecurityUtil.getAccountId(Astro.request);
+const kingdom = await GameEngine.loadKingdom(accountId);
 console.log("Loading page: ", title);
 
 // If the user is not logged in, redirect them to the login page
@@ -66,7 +69,7 @@ console.log("Loading page: ", title);
 					</svg>
 				</div>
 			</div> -->
-			{isLoggedIn && <Statusbar />}
+			{kingdom && <Statusbar />}
 		</header>
 
 		<slot />
