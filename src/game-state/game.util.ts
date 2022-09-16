@@ -1,6 +1,10 @@
 import type { Kingdom, Military, Snapshot } from "../models/kingdom-dto.model";
 
 export const GameUtil = {
+	getLastTick: (kingdom: Kingdom): number => {
+		const index = Math.max(kingdom.snapshots.size - 1, 0);
+		return index;
+	},
 	getCurrent: (kingdom: Kingdom): Snapshot => {
 		let result = kingdom.snapshots.get(kingdom.snapshots.size - 1);
 		if (!result) {

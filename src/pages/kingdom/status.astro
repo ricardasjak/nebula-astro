@@ -60,6 +60,18 @@ console.log(queues);
 						Tanks: {current.military.tanks.toLocaleString()}{" "}
 						<span class="ml-6">{(current.queues.military.tanks || []).join(", ")}</span>
 					</div>
+					<div>
+						Troopers: {current.military.tr.toLocaleString()}{" "}
+						<span class="ml-6">{(current.queues.military.tr || []).join(", ")}</span>
+					</div>
+					<div>
+						Laser Troopers: {current.military.lt.toLocaleString()}{" "}
+						<span class="ml-6">{(current.queues.military.lt || []).join(", ")}</span>
+					</div>
+					<div>
+						Scientists: {current.military.sci.toLocaleString()}{" "}
+						<span class="ml-6">{(current.queues.military.sci || []).join(", ")}</span>
+					</div>
 				</div>
 				<div class="text-xs grid grid-cols-7 mt-6">
 					<pre class="ext-clip text-ellipsis overflow-clip">{JSON.stringify(kingdom, null, 2)}</pre>

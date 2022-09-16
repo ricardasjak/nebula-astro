@@ -1,0 +1,19 @@
+---
+import { GameEngine } from "../game-state/game.state";
+import { GameUtil } from "../game-state/game.util";
+import { SecurityUtil } from "../utils/security.util";
+
+const accountId = SecurityUtil.getAccountId(Astro.request);
+
+const kingdom = await GameEngine.loadKingdom(accountId);
+
+const tick = GameUtil.getLastTick(kingdom);
+const current = GameUtil.getCurrent(kingdom);
+---
+
+<div class="flex flex-row justify-between border-b-2 text-xs pt-2 pb-2">
+	<div>Tick: {tick + 1}</div>
+	<div>Money: {current.money.toLocaleString()}</div>
+	<div>Land: {current.land.toLocaleString()}</div>
+	<div>Networth: {current.nw.toLocaleString()}</div>
+</div>

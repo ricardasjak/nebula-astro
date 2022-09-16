@@ -2,6 +2,7 @@
 import { SecurityUtil } from "../utils/security.util";
 import "../styles/global.css";
 import { ROUTES } from "../utils/routes.const";
+import Statusbar from "../components/Statusbar.astro";
 
 // import { isLoggedIn } from '../utils';
 export interface Props {
@@ -9,6 +10,7 @@ export interface Props {
 }
 
 const { title } = Astro.props;
+const isLoggedIn = SecurityUtil.isLoggedIn(Astro.request);
 console.log("Loading page: ", title);
 
 // If the user is not logged in, redirect them to the login page
@@ -31,7 +33,7 @@ console.log("Loading page: ", title);
 		<title>{title}</title>
 	</head>
 	<body class="container mx-auto">
-		<header>
+		<header class="mb-6">
 			<nav class="flex text-lg gap-5 p-3 border-b-2 mb-3">
 				<a href={ROUTES.action}>
 					<i class="fa fa-rocket" aria-hidden="true"></i>
@@ -44,7 +46,9 @@ console.log("Loading page: ", title);
 				<a href={ROUTES.account} class="ml-auto">Account</a>
 				<a href={ROUTES.logout}>Logout</a>
 			</nav>
+			{isLoggedIn && <Statusbar />}
 		</header>
+
 		<slot />
 		<style>
 

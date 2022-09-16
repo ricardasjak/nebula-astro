@@ -5,12 +5,13 @@ import { GameUtil } from "../../game-state/game.util";
 import { MilitaryUtil } from "../../game-state/military.util";
 import LayoutAuth from "../../layouts/LayoutAuth.astro";
 import { Action, ActionType, ACTION_TITLE } from "../../models/action.model";
+import type { UnitType } from "../../models/kingdom-dto.model";
 import { ROUTES } from "../../utils/routes.const";
 import { SecurityUtil } from "../../utils/security.util";
 
 const session = SecurityUtil.getUser(Astro.request);
 const ACTION = "action";
-let error;
+let error: string | undefined = "";
 
 if (!session) {
 	return Astro.redirect(ROUTES.login);
@@ -22,60 +23,101 @@ const actions: Action[] = [
 		amount: 36,
 	},
 	{
+		type: "soldiers",
+		amount: 400,
+	},
+	{
 		type: "tanks",
+		amount: 100,
+	},
+	{
+		type: "lt",
+		amount: 200,
+	},
+	{
+		type: "tr",
+		amount: 200,
+	},
+	{
+		type: "hgl",
+		amount: 200,
+	},
+	{
+		type: "tf",
+		amount: 200,
+	},
+	{
+		type: "sci",
 		amount: 100,
 	},
 	{
 		type: "soldiers",
 		amount: 400,
 	},
+];
+
+const actionAmount = (type: ActionType): number => actions.find((a) => a.type === type)?.amount || 0;
+
+const kingdom = await GameEngine.loadKingdom(session.accountId);
+if (!kingdom) return Astro.redirect(ROUTES.createKingdom);
+const current = GameUtil.getCurrent(kingdom);
+const tick = GameUtil.getLastTick(kingdom);
+const availableActions = [
+	...actions.filter((v, i) => (tick + i) % 3 === 0),
 	{
 		type: "skip",
 		amount: 0,
 	},
 ];
 
-const kingdom = await GameEngine.loadKingdom(session.accountId);
-if (!kingdom) return Astro.redirect(ROUTES.createKingdom);
-
 if (Astro.request.method === "POST") {
 	const formData = await Astro.request.formData();
 	const values = [...formData.values()];
 	const action = formData.get(ACTION) as ActionType;
+
+	console.log("money before: ", current.money);
 	// console.log({action});
 
 	switch (action) {
 		case "explore": {
-			const current = GameUtil.getCurrent(kingdom);
-			console.log("exploration:", current.money, current.queues.land);
-			error = ExploreUtil.explore(kingdom, 36)[1];
-			console.log("exploration:", current.money, current.queues.land);
+			error = ExploreUtil.explore(kingdom, actionAmount(action))[1];
+			break;
 		}
-		case "tanks": {
-			const current = GameUtil.getCurrent(kingdom);
-			error = MilitaryUtil.buy(kingdom, "tanks", 100);
+		case "skip": {
+			break;
 		}
-		case "soldiers": {
-			const current = GameUtil.getCurrent(kingdom);
-			error = MilitaryUtil.buy(kingdom, "soldiers", 400);
+		// case "tanks": {
+		// 	error = MilitaryUtil.buy(kingdom, "tanks", actionAmount(action));
+		// }
+		// case "soldiers": {
+		// 	error = MilitaryUtil.buy(kingdom, "soldiers", actionAmount(action));
+		// }
+		default: {
+			error = MilitaryUtil.buy(kingdom, action as UnitType, actionAmount(action));
+			break;
 		}
 	}
 
+	console.log("money after: ", current.money);
+
 	if (!error) {
-		return Astro.redirect(ROUTES.tick);
+		//return Astro.redirect(ROUTES.tick);
+		const x = await GameEngine.tickKingdom(session.accountId);
+		console.log("money after tick: ", GameUtil.getCurrent(kingdom).money);
 	}
 }
 ---
 
 <LayoutAuth title="Action Centre">
+	<!-- <h1 class="mb-3">Tick: {tick + 1}</h1> -->
 	<div class="grid grid-cols-1 gap-5 w-max">
 		{!!error && <pre class="text-red-500 text-sm">{error}</pre>}
 		{
-			actions.map(({ type, amount }) => {
+			availableActions.map(({ type, amount }, index) => {
 				return (
 					<form method="post">
 						<input value={type} name={ACTION} type="hidden" />
-						<button type="submit" class="w-64">
+						<button type="submit" class="w-72">
 							{ACTION_TITLE[type](amount)}
 						</button>
 					</form>

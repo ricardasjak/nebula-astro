@@ -28,7 +28,7 @@ export const TickUtil = {
 		});
 
 		next.nw = GameUtil.getNetworth(next);
-		next.money += next.land * 120; // temp hack
+		next.money += 100000; //next.land * 100; // temp hack
 		kd.snapshots.set(tick, { tick, kdid: kd.id, body: next, created_at: new Date().toUTCString() });
 
 		console.log("tick", { current });
